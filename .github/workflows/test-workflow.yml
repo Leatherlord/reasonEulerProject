@@ -39,6 +39,7 @@ jobs:
       run: opam install reason
   # This workflow contains a single job called "build"
   build:
+    needs: setup_ocaml
     strategy:
       fail-fast: false
       matrix:
