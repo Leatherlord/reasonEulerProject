@@ -5,22 +5,14 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github Leatherlord/reasonEulerProject))
 
-(authors "Author Name")
+(authors "Boyko Vladislav")
 
-(maintainers "Maintainer Name")
-
-(license LICENSE)
-
-(documentation https://url/to/documentation)
+(maintainers "Boyko Vladislav")
 
 (package
  (name reasonEulerProject)
- (synopsis "A short synopsis")
- (description "A longer description")
- (depends ocaml dune)
- (tags
-  (topics "to describe" your project)))
-
-; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
+ (synopsis "Functional Programming first assignment.")
+ (description "Set of different solutions for 13th and 18th of Euler Problems.")
+ (depends ocaml dune reason)
