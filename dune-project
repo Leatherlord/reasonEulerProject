@@ -14,5 +14,6 @@
 (package
  (name reasonEulerProject)
  (synopsis "Functional Programming first assignment.")
- (description "Set of different solutions for 13th and 18th of Euler Problems.")
+ (description
+  "Set of different solutions for 13th and 18th of Euler Problems.")
  (depends ocaml dune reason))
