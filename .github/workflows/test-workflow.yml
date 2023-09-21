@@ -15,8 +15,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  setup_ocaml:
     strategy:
       fail-fast: false
       matrix:
@@ -38,6 +37,22 @@ jobs:
 
     - name: Install Reason
       run: opam install reason
+  # This workflow contains a single job called "build"
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout tree
+      uses: actions/checkout@v4
+
+    - name: Eval Opam
+      run: eval $(opam env)
 
     - name: Build
       run: dune build
