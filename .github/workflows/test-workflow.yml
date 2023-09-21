@@ -49,8 +49,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     
     steps:
-    - name: Checkout tree
-      uses: actions/checkout@v4
+    - name: Get into repo
+      run: cd /home/runner/work/reasonEulerProject/reasonEulerProject
 
     - name: Eval Opam
       run: eval $(opam env)
