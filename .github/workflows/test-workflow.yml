@@ -13,9 +13,11 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions: read-all    
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  setup_ocaml:
+  build:
     strategy:
       fail-fast: false
       matrix:
@@ -25,35 +27,18 @@ jobs:
           - "4.14.1"
 
     runs-on: ${{ matrix.os }}
-    
+
     steps:
-    - name: Checkout tree
-      uses: actions/checkout@v4
+      - name: Checkout tree
+        uses: actions/checkout@v4
 
-    - name: Set-up OCaml ${{ matrix.ocaml-compiler }}
-      uses: ocaml/setup-ocaml@v2
-      with:
-        ocaml-compiler: ${{ matrix.ocaml-compiler }}
+      - name: Set-up OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
 
-    - name: Install Reason
-      run: opam install reason
-  # This workflow contains a single job called "build"
-  build:
-    needs: setup_ocaml
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
+      - run: opam install . --deps-only --with-test
 
-    runs-on: ${{ matrix.os }}
-    
-    steps:
-    - name: Get into repo
-      run: cd /home/runner/work/reasonEulerProject/reasonEulerProject
+      - run: opam exec -- dune build
 
-    - name: Eval Opam
-      run: eval $(opam env)
-
-    - name: Build
-      run: dune build
+      - run: opam exec -- dune runtest
