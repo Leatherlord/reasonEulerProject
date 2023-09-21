@@ -1,4 +1,6 @@
 (executable
  (public_name reasonEulerProject)
  (name main)
- (libraries reasonEulerProject))
+ (libraries reasonEulerProject)
+ (flags
+  (:standard -w +A)))
