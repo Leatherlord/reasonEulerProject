@@ -1,1 +1,5 @@
-let () = print_endline("Hello, World!");
+let main = () => {
+  print_endline("Hello, World!");
+};
+
+main();
