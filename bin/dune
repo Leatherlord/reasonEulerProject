@@ -1,5 +1,5 @@
 (executable
- (public_name reasonEulerProject)
+ (public_name app)
  (name main)
  (libraries reasonEulerProject)
  (flags
