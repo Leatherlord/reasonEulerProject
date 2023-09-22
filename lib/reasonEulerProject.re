@@ -1,4 +1,4 @@
-let monolithRecursive = dataStr => {
+let p13monolithRecursive = dataStr => {
   let rec strListToZList = strList =>
     switch (strList) {
     | [] => []
@@ -20,10 +20,9 @@ let monolithRecursive = dataStr => {
       10,
     );
   result;
-  //   print_endline(result);
 };
 
-let monolithTailRecursive = dataStr => {
+let p13monolithTailRecursive = dataStr => {
   let strListToZList = strList => {
     let rec strListToZListInner = (strList, acc) =>
       switch (strList) {
@@ -52,5 +51,4 @@ let monolithTailRecursive = dataStr => {
       10,
     );
   result;
-  //   print_endline(result);
 };
