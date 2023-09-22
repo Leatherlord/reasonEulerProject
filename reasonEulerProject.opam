@@ -11,6 +11,8 @@ depends: [
   "ocaml"
   "dune" {>= "3.10"}
   "reason"
+  "zarith"
+  "ounit2"
   "odoc" {with-doc}
 ]
 build: [
