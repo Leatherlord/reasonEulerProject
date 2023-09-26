@@ -19,15 +19,23 @@ let p18modular = data => {
   };
 
   let count = intListList => {
-    let rec countInner = (data, level, position) =>
-      if (level >= List.length(data)) {
-        0;
-      } else {
-        let left = countInner(data, level + 1, position);
-        let right = countInner(data, level + 1, position + 1);
-        List.nth(List.nth(data, level), position) + max(left, right);
+    let maxPairs = ys => List.map2(max, ys, List.tl(ys) @ [0]);
+    let rec firstN = (lst, n) => {
+      switch (lst) {
+      | [] => []
+      | [hd, ...tl] =>
+        if (n == 1) {
+          [hd];
+        } else {
+          [hd, ...firstN(tl, n - 1)];
+        }
       };
-    countInner(intListList, 0, 0);
+    };
+    let f = (s, rs) => {
+      List.map2((+), maxPairs(firstN(rs, List.length(s) + 1)), s @ [0]);
+    };
+    let zeroes = Seq.take(List.length(intListList) + 1, Seq.forever(_ => 0));
+    List.hd(List.fold_right(f, intListList, List.of_seq(zeroes)));
   };
 
   count(generate(data));
