@@ -56,5 +56,42 @@ let testsP13MonolithTailRecursive =
     ),
   ];
 
+let testsP18MonolithRecursive =
+  "test suite for problem 18 monolith recursive"
+  >::: [
+    "single number" >:: (_ => assert_equal(24, p18monolithRecursive("24"))),
+    "easy case"
+    >:: (_ => assert_equal(10, p18monolithRecursive("1
+2 3
+4 5 6"))),
+    "should fail (cannot cast empty string to int)"
+    >:: (
+      _ =>
+        assert_raises(Failure("int_of_string"), () =>
+          p18monolithRecursive("")
+        )
+    ),
+  ];
+
+let testsP18MonolithTailRecursive =
+  "test suite for problem 18 monolith tail recursive"
+  >::: [
+    "single number"
+    >:: (_ => assert_equal(24, p18monolithTailRecursive("24"))),
+    "easy case"
+    >:: (_ => assert_equal(10, p18monolithTailRecursive("1
+2 3
+4 5 6"))),
+    "should fail (cannot cast empty string to int)"
+    >:: (
+      _ =>
+        assert_raises(Failure("int_of_string"), () =>
+          p18monolithTailRecursive("")
+        )
+    ),
+  ];
+
 run_test_tt_main(testsP13MonolithRecursive);
 run_test_tt_main(testsP13MonolithTailRecursive);
+run_test_tt_main(testsP18MonolithRecursive);
+run_test_tt_main(testsP18MonolithTailRecursive);
