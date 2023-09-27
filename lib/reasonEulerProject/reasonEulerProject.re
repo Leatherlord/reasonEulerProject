@@ -1,20 +1,22 @@
+open ReUtils;
+
 let p13monolithRecursive = dataStr => {
   let rec strListToZList = strList =>
     switch (strList) {
     | [] => []
-    | [hd, ...tl] => [Z.of_string(hd), ...strListToZList(tl)]
+    | [hd, ...tl] => [ReZ.ofString(hd), ...strListToZList(tl)]
     };
 
   let rec sumZ = zList =>
     switch (zList) {
-    | [] => Z.zero
-    | [hd, ...tl] => Z.(+)(hd, sumZ(tl))
+    | [] => ReZ.zero
+    | [hd, ...tl] => ReZ.(+)(hd, sumZ(tl))
     };
 
   let result =
-    String.sub(
-      Z.to_string(
-        sumZ(strListToZList(String.split_on_char('\n', dataStr))),
+    ReString.sub(
+      ReZ.toString(
+        sumZ(strListToZList(ReString.splitOnChar('\n', dataStr))),
       ),
       0,
       10,
@@ -27,7 +29,7 @@ let p13monolithTailRecursive = dataStr => {
     let rec strListToZListInner = (strList, acc) =>
       switch (strList) {
       | [] => acc
-      | [hd, ...tl] => strListToZListInner(tl, [Z.of_string(hd), ...acc])
+      | [hd, ...tl] => strListToZListInner(tl, [ReZ.ofString(hd), ...acc])
       };
     strListToZListInner(strList, []);
   };
@@ -36,16 +38,16 @@ let p13monolithTailRecursive = dataStr => {
     let rec sumZInner = (zList, acc) =>
       switch (zList) {
       | [] => acc
-      | [hd, ...tl] => sumZInner(tl, Z.(+)(acc, hd))
+      | [hd, ...tl] => sumZInner(tl, ReZ.(+)(acc, hd))
       };
 
-    sumZInner(zList, Z.zero);
+    sumZInner(zList, ReZ.zero);
   };
 
   let result =
-    String.sub(
-      Z.to_string(
-        sumZ(strListToZList(String.split_on_char('\n', dataStr))),
+    ReString.sub(
+      ReZ.toString(
+        sumZ(strListToZList(ReString.splitOnChar('\n', dataStr))),
       ),
       0,
       10,
@@ -58,9 +60,9 @@ let p18monolithRecursive = dataStr => {
     let rec strListToIntList = strList =>
       switch (strList) {
       | [] => []
-      | [hd, ...tl] => [int_of_string(hd), ...strListToIntList(tl)]
+      | [hd, ...tl] => [intOfString(hd), ...strListToIntList(tl)]
       };
-    strListToIntList(String.split_on_char(' ', str));
+    strListToIntList(ReString.splitOnChar(' ', str));
   };
 
   let rec strListToIntListList = strList => {
@@ -72,17 +74,17 @@ let p18monolithRecursive = dataStr => {
 
   let count = data => {
     let rec countInner = (data, level, position) =>
-      if (level >= List.length(data)) {
+      if (level >= ReList.length(data)) {
         0;
       } else {
         let left = countInner(data, level + 1, position);
         let right = countInner(data, level + 1, position + 1);
-        List.nth(List.nth(data, level), position) + max(left, right);
+        ReList.nth(ReList.nth(data, level), position) + max(left, right);
       };
     countInner(data, 0, 0);
   };
 
-  count(strListToIntListList(String.split_on_char('\n', dataStr)));
+  count(strListToIntListList(ReString.splitOnChar('\n', dataStr)));
 };
 
 let p18monolithTailRecursive = dataStr => {
@@ -92,12 +94,12 @@ let p18monolithTailRecursive = dataStr => {
         switch (strList) {
         | [] => acc
         | [hd, ...tl] =>
-          strListToIntListInner(tl, [int_of_string(hd), ...acc])
+          strListToIntListInner(tl, [intOfString(hd), ...acc])
         };
       };
       strListToIntListInner(strList, []);
     };
-    strListToIntList(String.split_on_char(' ', str));
+    strListToIntList(ReString.splitOnChar(' ', str));
   };
 
   let strListToIntListList = strList => {
@@ -116,41 +118,44 @@ let p18monolithTailRecursive = dataStr => {
       if (level <= (-1)) {
         0;
       } else {
-        let currList = List.nth(data, level);
+        let currList = ReList.nth(data, level);
         let left = countInner(data, level - 1, position);
         let right = countInner(data, level - 1, position + 1);
-        List.nth(currList, List.length(currList) - position - 1)
+        ReList.nth(currList, ReList.length(currList) - position - 1)
         + max(left, right);
       };
-    countInner(data, List.length(data) - 1, 0);
+    countInner(data, ReList.length(data) - 1, 0);
   };
 
-  count(strListToIntListList(String.split_on_char('\n', dataStr)));
+  count(strListToIntListList(ReString.splitOnChar('\n', dataStr)));
 };
 
 let p13modular = data => {
   let generate = dataStr => {
-    List.map(str => Z.of_string(str), String.split_on_char('\n', dataStr));
+    ReList.map(
+      str => ReZ.ofString(str),
+      ReString.splitOnChar('\n', dataStr),
+    );
   };
 
   let count = zList => {
-    List.fold_left(Z.(+), Z.zero, zList);
+    ReList.foldLeft(ReZ.(+), ReZ.zero, zList);
   };
 
-  String.sub(Z.to_string(count(generate(data))), 0, 10);
+  ReString.sub(ReZ.toString(count(generate(data))), 0, 10);
 };
 
 let p18modular = data => {
   let generate = dataStr => {
-    List.map(
+    ReList.map(
       strList =>
-        List.map(int_of_string, String.split_on_char(' ', strList ++ " 0")),
-      String.split_on_char('\n', dataStr),
+        ReList.map(intOfString, ReString.splitOnChar(' ', strList ++ " 0")),
+      ReString.splitOnChar('\n', dataStr),
     );
   };
 
   let count = intListList => {
-    let maxPairs = ys => List.map2(max, ys, List.tl(ys) @ [0]);
+    let maxPairs = ys => ReList.map2(max, ys, ReList.tl(ys) @ [0]);
     let rec firstN = (lst, n) => {
       switch (lst) {
       | [] => []
@@ -163,10 +168,11 @@ let p18modular = data => {
       };
     };
     let f = (s, rs) => {
-      List.map2((+), maxPairs(firstN(rs, List.length(s))), s);
+      ReList.map2((+), maxPairs(firstN(rs, ReList.length(s))), s);
     };
-    let zeroes = Seq.take(List.length(intListList) + 1, Seq.forever(_ => 0));
-    List.hd(List.fold_right(f, intListList, List.of_seq(zeroes)));
+    let zeroes =
+      Seq.take(ReList.length(intListList) + 1, Seq.forever(_ => 0));
+    ReList.hd(ReList.foldRight(f, intListList, ReList.ofSeq(zeroes)));
   };
 
   count(generate(data));

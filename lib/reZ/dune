@@ -1,5 +1,5 @@
 (library
- (name reasonEulerProject)
+ (name reZ)
  (flags
   (:standard -w +A))
  (libraries zarith))
