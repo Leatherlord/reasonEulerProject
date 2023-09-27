@@ -99,6 +99,12 @@ let data13 = "37107287533902102798797998220837590246510135740250
 20849603980134001723930671666823555245252804609722
 53503534226472524250874054075591789781264330331690";
 
+print_endline(
+  "13 recursive: " ++ ReasonEulerProject.p13monolithRecursive(data13),
+);
+print_endline(
+  "13 tail recursive: " ++ ReasonEulerProject.p13monolithTailRecursive(data13),
+);
 print_endline("13 modular: " ++ ReasonEulerProject.p13modular(data13));
 
 let data18 = "75
@@ -116,6 +122,16 @@ let data18 = "75
 91 71 52 38 17 14 91 43 58 50 27 29 48
 63 66 04 68 89 53 67 30 73 16 69 87 40 31
 04 62 98 27 23 09 70 98 73 93 38 53 60 04 23";
+
+print_endline(
+  "18 recursive: "
+  ++ string_of_int(ReasonEulerProject.p18monolithRecursive(data18)),
+);
+
+print_endline(
+  "18 tail recursive: "
+  ++ string_of_int(ReasonEulerProject.p18monolithTailRecursive(data18)),
+);
 
 print_endline(
   "18 modular: " ++ string_of_int(ReasonEulerProject.p18modular(data18)),
