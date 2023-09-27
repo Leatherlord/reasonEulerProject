@@ -1,2 +1,3 @@
 (test
- (name reasonEulerProjectTest))
+ (name reasonEulerProjectTest)
+ (libraries ounit2 reasonEulerProject))
