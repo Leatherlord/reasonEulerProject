@@ -1,179 +1,180 @@
 open ReUtils;
 
 let p13monolithRecursive = dataStr => {
-  let rec strListToZList = strList =>
-    switch (strList) {
+  let rec strListToZList =
+    fun
     | [] => []
-    | [hd, ...tl] => [ReZ.ofString(hd), ...strListToZList(tl)]
-    };
+    | [hd, ...tl] => [hd |> ReZ.ofString, ...tl |> strListToZList];
 
-  let rec sumZ = zList =>
-    switch (zList) {
+  let rec sumZ =
+    fun
     | [] => ReZ.zero
-    | [hd, ...tl] => ReZ.(+)(hd, sumZ(tl))
-    };
+    | [hd, ...tl] => ReZ.(+)(hd, tl |> sumZ);
 
-  let result =
-    ReString.sub(
-      ReZ.toString(
-        sumZ(strListToZList(ReString.splitOnChar('\n', dataStr))),
-      ),
-      0,
-      10,
-    );
-  result;
+  dataStr
+  |> ReString.splitOnChar('\n', _)
+  |> strListToZList
+  |> sumZ
+  |> ReZ.toString
+  |> ReString.sub(_, 0, 10);
 };
 
 let p13monolithTailRecursive = dataStr => {
   let strListToZList = strList => {
-    let rec strListToZListInner = (strList, acc) =>
-      switch (strList) {
-      | [] => acc
-      | [hd, ...tl] => strListToZListInner(tl, [ReZ.ofString(hd), ...acc])
-      };
-    strListToZListInner(strList, []);
+    let rec strListToZListInner =
+      fun
+      | ([], acc) => acc
+      | ([hd, ...tl], acc) =>
+        (tl, [hd |> ReZ.ofString, ...acc]) |> strListToZListInner;
+
+    (strList, []) |> strListToZListInner;
   };
 
   let sumZ = zList => {
-    let rec sumZInner = (zList, acc) =>
-      switch (zList) {
-      | [] => acc
-      | [hd, ...tl] => sumZInner(tl, ReZ.(+)(acc, hd))
-      };
+    let rec sumZInner =
+      fun
+      | ([], acc) => acc
+      | ([hd, ...tl], acc) => (tl, ReZ.(+)(acc, hd)) |> sumZInner;
 
-    sumZInner(zList, ReZ.zero);
+    (zList, ReZ.zero) |> sumZInner;
   };
 
-  let result =
-    ReString.sub(
-      ReZ.toString(
-        sumZ(strListToZList(ReString.splitOnChar('\n', dataStr))),
-      ),
-      0,
-      10,
-    );
-  result;
+  dataStr
+  |> ReString.splitOnChar('\n')
+  |> strListToZList
+  |> sumZ
+  |> ReZ.toString
+  |> ReString.sub(_, 0, 10);
 };
 
 let p18monolithRecursive = dataStr => {
-  let strToIntList = str => {
-    let rec strListToIntList = strList =>
-      switch (strList) {
-      | [] => []
-      | [hd, ...tl] => [intOfString(hd), ...strListToIntList(tl)]
-      };
-    strListToIntList(ReString.splitOnChar(' ', str));
-  };
+  let rec strListToIntListList = {
+    let strToIntList = str => {
+      let rec strListToIntList =
+        fun
+        | [] => []
+        | [hd, ...tl] => [hd |> intOfString, ...tl |> strListToIntList];
 
-  let rec strListToIntListList = strList => {
-    switch (strList) {
-    | [] => []
-    | [hd, ...tl] => [strToIntList(hd), ...strListToIntListList(tl)]
+      str |> ReString.splitOnChar(' ') |> strListToIntList;
     };
+
+    fun
+    | [] => []
+    | [hd, ...tl] => [hd |> strToIntList, ...tl |> strListToIntListList];
   };
 
   let count = data => {
-    let rec countInner = (data, level, position) =>
-      if (level >= ReList.length(data)) {
-        0;
-      } else {
-        let left = countInner(data, level + 1, position);
-        let right = countInner(data, level + 1, position + 1);
-        ReList.nth(ReList.nth(data, level), position) + max(left, right);
-      };
-    countInner(data, 0, 0);
+    let rec countInner =
+      fun
+      | (data, level, _) when level >= ReList.length(data) => 0
+      | (data, level, position) => {
+          let left = countInner((data, level + 1, position));
+          let right = countInner((data, level + 1, position + 1));
+          ReList.nth(ReList.nth(data, level), position) + max(left, right);
+        };
+
+    (data, 0, 0) |> countInner;
   };
 
-  count(strListToIntListList(ReString.splitOnChar('\n', dataStr)));
+  dataStr |> ReString.splitOnChar('\n') |> strListToIntListList |> count;
 };
 
 let p18monolithTailRecursive = dataStr => {
   let strToIntList = str => {
     let strListToIntList = strList => {
-      let rec strListToIntListInner = (strList, acc) => {
-        switch (strList) {
-        | [] => acc
-        | [hd, ...tl] =>
-          strListToIntListInner(tl, [intOfString(hd), ...acc])
-        };
-      };
-      strListToIntListInner(strList, []);
+      let rec strListToIntListInner =
+        fun
+        | ([], acc) => acc
+        | ([hd, ...tl], acc) =>
+          (tl, [intOfString(hd), ...acc]) |> strListToIntListInner;
+
+      (strList, []) |> strListToIntListInner;
     };
-    strListToIntList(ReString.splitOnChar(' ', str));
+    str |> ReString.splitOnChar(' ') |> strListToIntList;
   };
 
   let strListToIntListList = strList => {
-    let rec strListToIntListListInner = (strList, acc) => {
-      switch (strList) {
-      | [] => acc
-      | [hd, ...tl] =>
-        strListToIntListListInner(tl, [strToIntList(hd), ...acc])
-      };
-    };
-    strListToIntListListInner(strList, []);
+    let rec strListToIntListListInner =
+      fun
+      | ([], acc) => acc
+      | ([hd, ...tl], acc) =>
+        (tl, [hd |> strToIntList, ...acc]) |> strListToIntListListInner;
+
+    (strList, []) |> strListToIntListListInner;
   };
 
   let count = data => {
-    let rec countInner = (data, level, position) =>
-      if (level <= (-1)) {
-        0;
-      } else {
-        let currList = ReList.nth(data, level);
-        let left = countInner(data, level - 1, position);
-        let right = countInner(data, level - 1, position + 1);
-        ReList.nth(currList, ReList.length(currList) - position - 1)
-        + max(left, right);
-      };
-    countInner(data, ReList.length(data) - 1, 0);
+    let rec countInner =
+      fun
+      | (_, level, _) when level <= (-1) => 0
+      | (data, level, position) => {
+          let currList = ReList.nth(data, level);
+          let left = countInner((data, level - 1, position));
+          let right = countInner((data, level - 1, position + 1));
+          ReList.nth(currList, ReList.length(currList) - position - 1)
+          + max(left, right);
+        };
+
+    (data, ReList.length(data) - 1, 0) |> countInner;
   };
 
-  count(strListToIntListList(ReString.splitOnChar('\n', dataStr)));
+  dataStr |> ReString.splitOnChar('\n') |> strListToIntListList |> count;
 };
 
 let p13modular = data => {
-  let generate = dataStr => {
-    ReList.map(
-      str => ReZ.ofString(str),
-      ReString.splitOnChar('\n', dataStr),
-    );
+  let transform = (numbers: string) => {
+    numbers
+    |> ReString.splitOnChar('\n')
+    |> ReList.map(str => str |> ReZ.ofString);
   };
 
-  let count = zList => {
-    ReList.foldLeft(ReZ.(+), ReZ.zero, zList);
+  let sum = (numbers: list(Z.t)) => {
+    numbers |> ReList.foldLeft(ReZ.(+), ReZ.zero);
   };
 
-  ReString.sub(ReZ.toString(count(generate(data))), 0, 10);
+  data |> transform |> sum |> ReZ.toString |> ReString.sub(_, 0, 10);
 };
 
 let p18modular = data => {
-  let generate = dataStr => {
-    ReList.map(
-      strList =>
-        ReList.map(intOfString, ReString.splitOnChar(' ', strList ++ " 0")),
-      ReString.splitOnChar('\n', dataStr),
-    );
+  let transform = (triangle: string) => {
+    triangle
+    |> ReString.splitOnChar('\n')
+    |> ReList.map(line =>
+         " 0"
+         |> (++)(line)
+         |> ReString.splitOnChar(' ')
+         |> ReList.map(intOfString)
+       );
   };
 
   let count = intListList => {
-    let maxPairs = ys => ReList.map2(max, ys, ReList.tl(ys) @ [0]);
-    let rec firstN = (lst, n) => {
-      switch (lst) {
-      | [] => []
-      | [hd, ...tl] =>
-        if (n == 1) {
-          [hd];
-        } else {
-          [hd, ...firstN(tl, n - 1)];
-        }
-      };
+    let maxPairs = (line: list(int)) => {
+      [0] |> (@)(line |> ReList.tl) |> ReList.map2(max, line);
     };
-    let f = (s, rs) => {
-      ReList.map2((+), maxPairs(firstN(rs, ReList.length(s))), s);
+
+    let rec firstN =
+      fun
+      | ([], _) => []
+      | ([_, ..._], n) when n == 0 => []
+      | ([hd, ..._], n) when n == 1 => [hd]
+      | ([hd, ...tl], n) => [hd, ...firstN((tl, n - 1))];
+
+    let folder = (line: list(int), results: list(int)) => {
+      (results, ReList.length(line))
+      |> firstN
+      |> maxPairs
+      |> ReList.map2((+), _, line);
     };
+
     let zeroes =
-      Seq.take(ReList.length(intListList) + 1, Seq.forever(_ => 0));
-    ReList.hd(ReList.foldRight(f, intListList, ReList.ofSeq(zeroes)));
+      intListList
+      |> ReList.length
+      |> (+)(1)
+      |> Seq.take(_, Seq.forever(_ => 0))
+      |> ReList.ofSeq;
+
+    intListList |> ReList.foldRight(folder, _, zeroes) |> ReList.hd;
   };
 
-  count(generate(data));
+  data |> transform |> count;
 };
